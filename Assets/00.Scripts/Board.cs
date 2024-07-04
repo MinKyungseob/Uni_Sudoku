@@ -1,17 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Random = UnityEngine.Random;
 
 public class Board : MonoBehaviour
 {
     int[,] solveGrid = new int [9,9];
-    int[,] riddleGrid = new int [9,9];
-    private int piecesToErase;
     string s;
-    
+    int[,] riddleGrid = new int [9,9];
+    public int piecesToErase = 35;
+    public Transform[] parts;
+
+    public Transform Part11, Part12, Part13, Part21, Part22, Part23, Part31, Part32, Part33;
+    public GameObject buttonPrefab;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        parts = GetComponentsInChildren<Transform>();
+    }
+    
+
     void Start()
     {
         InitGrid(ref solveGrid);
@@ -19,6 +31,7 @@ public class Board : MonoBehaviour
 
         ShuffleGrid(ref solveGrid, 5);
         CreateRiddleGrid();
+        CreateButtons();
     }
 
     void InitGrid(ref int[,] grid)
@@ -132,9 +145,79 @@ public class Board : MonoBehaviour
                 x1 = Random.Range(0, 9);
                 y1 = Random.Range(0, 9);
             }
-            //Once We Found One whit No 0
+            //Once We Found One with No 0
             riddleGrid[x1, y1] = 0;
         }
         DebugGrid(ref riddleGrid);
+    }
+
+    void CreateButtons()
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j <9; j++)
+            {
+                GameObject newButton = Instantiate(buttonPrefab);
+                
+                //Set all Values of each grid
+                NumberField numberField = newButton.GetComponent<NumberField>();
+                numberField.SetValues(i, j, riddleGrid[i, j], i + "," + j, this);
+                newButton.name = i + "," + j;
+                //parent of the button
+                if (i < 3)
+                {
+                    if (j < 3)
+                    {
+                        newButton.transform.SetParent(Part11, false);
+                    }
+
+                    if (j > 2 && j < 6)
+                    {
+                        newButton.transform.SetParent(Part12, false);
+                    }
+
+                    if (j > 5)
+                    {
+                        newButton.transform.SetParent(Part13, false);
+                    }
+                }
+
+                if (i > 2 && i < 6)
+                {
+                    if (j < 3)
+                    {
+                        newButton.transform.SetParent(Part21, false);
+                    }
+
+                    if (j > 2 && j < 6)
+                    {
+                        newButton.transform.SetParent(Part22, false);
+                    }
+
+                    if (j > 5)
+                    {
+                        newButton.transform.SetParent(Part23, false);
+                    }
+                }
+
+                if (i > 5)
+                {
+                    if (j < 3)
+                    {
+                        newButton.transform.SetParent(Part31, false);
+                    }
+
+                    if (j > 2 && j < 6)
+                    {
+                        newButton.transform.SetParent(Part32, false);
+                    }
+
+                    if (j > 5)
+                    {
+                        newButton.transform.SetParent(Part33, false);
+                    }
+                }
+            }
+        }
     }
 }
