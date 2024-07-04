@@ -41,4 +41,16 @@ public class NumberField : MonoBehaviour
          number.color = Color.blue;
       }
    }
+
+   public void ButtonClick()
+   {
+      InputField.instance.ActivateInputField(this);
+   }
+
+   public void ReceiveInput(int newValue)
+   {
+      value = newValue;
+      number.text = (value != 0) ? value.ToString() : "";
+      //Update Riddle
+   }
 }
