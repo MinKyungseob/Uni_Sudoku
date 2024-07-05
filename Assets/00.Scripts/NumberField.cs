@@ -52,5 +52,24 @@ public class NumberField : MonoBehaviour
       value = newValue;
       number.text = (value != 0) ? value.ToString() : "";
       //Update Riddle
+      board.SetInputInRiddle(x1, y1, value);
+   }
+
+   public int GetX()
+   {
+      return x1;
+   }
+   public int GetY()
+   {
+      return y1;
+   }
+
+   public void SetHint(int _value)
+   {
+      value = _value;
+      number.text = value.ToString();
+      number.color = Color.red;
+      GetComponentInParent<Button>().interactable = false;
+
    }
 }

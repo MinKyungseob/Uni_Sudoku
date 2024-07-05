@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
@@ -17,13 +18,27 @@ public class Board : MonoBehaviour
 
     public Transform Part11, Part12, Part13, Part21, Part22, Part23, Part31, Part32, Part33;
     public GameObject buttonPrefab;
-    // Start is called before the first frame update
+
+    private List<NumberField> fieldList = new List<NumberField>();
+    
+    //Difficulty
+    public enum Difficulties
+    {
+        DEBUG,
+        EASY,
+        MEDIUM,
+        HARD,
+        INSANE
+    }
+
+    public Difficulties difficulty;
+    private int maxHints = 5;
+    
     private void Awake()
     {
         parts = GetComponentsInChildren<Transform>();
     }
     
-
     void Start()
     {
         InitGrid(ref solveGrid);
@@ -133,6 +148,7 @@ public class Board : MonoBehaviour
             }
         }
         //Set Difficulty
+        SetDifficulty();
         
         //Erase From riddleGrid
         for (int i = 0; i < piecesToErase; i++)
@@ -163,6 +179,12 @@ public class Board : MonoBehaviour
                 NumberField numberField = newButton.GetComponent<NumberField>();
                 numberField.SetValues(i, j, riddleGrid[i, j], i + "," + j, this);
                 newButton.name = i + "," + j;
+
+                if (riddleGrid[i, j] == 0)
+                {
+                    fieldList.Add(numberField);
+                }
+                
                 //parent of the button
                 if (i < 3)
                 {
@@ -218,6 +240,84 @@ public class Board : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    public void SetInputInRiddle(int x, int y, int value)
+    {
+        riddleGrid[x, y] = value;
+    }
+    
+    void SetDifficulty()
+    {
+        switch (difficulty)
+        {
+            case Difficulties.DEBUG:
+                piecesToErase = 5;
+                maxHints = 2;
+                break;
+            case Difficulties.EASY:
+                piecesToErase = 35;
+                maxHints = 4;
+                break;
+            case Difficulties.MEDIUM :
+                piecesToErase = 40;
+                maxHints = 6;
+                break;
+            case Difficulties.HARD:
+                piecesToErase = 45;
+                maxHints = 8;
+                break;
+            case Difficulties.INSANE:
+                piecesToErase = 55;
+                maxHints = 10;
+                break;
+        }
+    }
+
+    public void CheckComplete()
+    {
+        if (CheckIfWon())
+        {
+            print("You Won!");
+        }
+        else
+        {
+            print("Try Again ToT");
+        }
+    }
+
+    bool CheckIfWon()
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                if (riddleGrid[i, j] != solveGrid[i, j])
+                    return false;
+            }
+            
+        }
+        return true;
+    }
+
+    public void ShowHint()
+    {
+        if (fieldList.Count > 0 && maxHints > 0)
+        {
+            int randIndex = Random.Range(0, fieldList.Count);
+
+            maxHints--;
+            riddleGrid[fieldList[randIndex].GetX(), fieldList[randIndex].GetY()] =
+                solveGrid[fieldList[randIndex].GetX(), fieldList[randIndex].GetY()];
+            
+            fieldList[randIndex].SetHint( riddleGrid[fieldList[randIndex].GetX(), fieldList[randIndex].GetY()]);
+            
+            fieldList.RemoveAt(randIndex);
+        }
+        else
+        {
+            print("No Hints Left");
         }
     }
 }
