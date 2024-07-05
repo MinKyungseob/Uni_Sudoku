@@ -41,6 +41,8 @@ public class Board : MonoBehaviour
     
     void Start()
     {
+        difficulty = (Board.Difficulties)Settings.difficulty;
+        
         InitGrid(ref solveGrid);
         //DebugGrid(ref solveGrid);
 
@@ -59,11 +61,11 @@ public class Board : MonoBehaviour
             }
         }
 
-        int n1 = 8 * 3;     //24
+        /*int n1 = 8 * 3;     //24
         int n2 = 8 / 3;     //2
         int n = (n1 + n2 + 0) % 9 + 1;
         print(n1 + " + " + n2 + "+" + 0);
-        print(n);
+        print(n);*/
     }
 
     void DebugGrid(ref int[,] grid)
@@ -89,7 +91,7 @@ public class Board : MonoBehaviour
             }
             s += "\n";
         }
-        print(s);
+        //print(s);
     }
 
     void ShuffleGrid(ref int[,] grid, int shuffleAmount)
@@ -101,7 +103,7 @@ public class Board : MonoBehaviour
             //mix 2 cells
             MixTwoGridCells(ref grid,value1, value2);
         }
-        DebugGrid(ref grid);
+        //DebugGrid(ref grid);
     }
 
     void MixTwoGridCells(ref int[,] grid, int value1, int value2)
@@ -164,7 +166,7 @@ public class Board : MonoBehaviour
             //Once We Found One with No 0
             riddleGrid[x1, y1] = 0;
         }
-        DebugGrid(ref riddleGrid);
+        //DebugGrid(ref riddleGrid);
     }
 
     void CreateButtons()
@@ -279,11 +281,11 @@ public class Board : MonoBehaviour
     {
         if (CheckIfWon())
         {
-            print("You Won!");
+            //print("You Won!");
         }
         else
         {
-            print("Try Again ToT");
+            //print("Try Again ToT");
         }
     }
 
@@ -317,7 +319,7 @@ public class Board : MonoBehaviour
         }
         else
         {
-            print("No Hints Left");
+            //print("No Hints Left");
         }
     }
 }
