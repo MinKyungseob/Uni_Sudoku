@@ -26,4 +26,14 @@ public class ButtonSetting : MonoBehaviour
 
         SceneManager.LoadScene("GameScene");
     }
+
+    public void Replay()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("TitleScene");
+    }
 }

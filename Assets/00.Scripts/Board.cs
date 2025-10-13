@@ -20,7 +20,9 @@ public class Board : MonoBehaviour
     public GameObject buttonPrefab;
 
     private List<NumberField> fieldList = new List<NumberField>();
-    
+
+    public GameObject winPanel;
+
     //Difficulty
     public enum Difficulties
     {
@@ -41,6 +43,7 @@ public class Board : MonoBehaviour
     
     void Start()
     {
+        winPanel.SetActive(false);
         difficulty = (Board.Difficulties)Settings.difficulty;
         
         InitGrid(ref solveGrid);
@@ -282,6 +285,7 @@ public class Board : MonoBehaviour
         if (CheckIfWon())
         {
             //print("You Won!");
+            winPanel.SetActive(true);
         }
         else
         {
